@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rizz Analyzer</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body { background-color: #000; color: #fff; font-family: 'Poppins', sans-serif; text-align: center; padding: 20px; }
+  h1 span.green { color: #8eff00; }
+  h1 span.pink { color: #ff5ebc; }
+  #video { width: 250px; border-radius: 15px; margin-top: 15px; display: none; transform: scaleX(1); border: 2px solid #fff; }
+  .results { margin-top: 20px; background: #111; padding: 15px; border-radius: 10px; text-align: left; max-width: 600px; margin-left:auto;margin-right:auto; height: 350px; overflow-y: auto; }
+  #bot-select { margin-bottom: 15px; }
+  select, button { font-size: 1rem; padding: 8px 15px; margin: 5px; border-radius: 8px; border: none; cursor: pointer; }
+  button#startConversation { background-color: #8eff00; color: #000; font-weight: bold; }
+  select { background-color: #333; color: #fff; }
+  .message { margin: 5px 0; padding: 8px 12px; border-radius: 10px; }
+  .bot-msg { background-color: #222; color: #ff5ebc; text-align: left; }
+  .user-msg { background-color: #333; color: #7CFC00; text-align: right; }
+ 
+  /* --- Rizz Score Report Styling --- */
+  .rizz-cup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    background: #1c1c1c;
+    border: 1px solid #ff5ebc;
+    border-radius: 12px;
+  }
+  h2 {
+    color: #ff5ebc;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+  }
+ 
+  .cup-scores {
+    width: 100%;
+    max-width: 450px; /* Constrain width for cleaner look */
+    margin-bottom: 15px;
+  }
+
+
+  .rizz-metric {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+  }
+
+
+  .label-box {
+    text-align: left;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 5px;
+    font-size: 1em;
+  }
+
+
+  .progress-bar {
+    height: 30px;
+    background-color: #333;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+  }
+
+
+  .rizz-fill {
+    height: 100%;
+    transition: width 1s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px; /* Space for the score text */
+  }
+
+
+  .rizz-fill .score-text {
+    color: #000;
+    font-weight: 700;
+    font-size: 1.1em;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+  }
+ 
+  .progress-bar.overall .rizz-fill .score-text {
+    color: #fff; /* White text for the pink bar */
+  }
+
+
+  .final-note {
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #222;
+    border-radius: 8px;
+    font-style: italic;
+    color: #8eff00;
+  }
+</style>
+</head>
+<body>
+<h1>🎙️ <span class="green">Rizz</span><span class="pink">Tutor</span></h1>
+<p>Practice real-life conversation and get feedback 💬</p>
+
+
+<div id="bot-select">
+  <label for="botChoice">Choose AI voice:</label>
+  <select id="botChoice">
+    <option value="female">Female</option>
+    <option value="male">Male</option>
+  </select>
+  <button id="startConversation">Start Conversation</button>
+</div>
+
+
+<video id="video" autoplay></video>
+<div id="result" class="results">
+  <p>Ready when you are 😎</p>
+</div>
+
+
+<script src="rizz-analyzer.js"></script>
+</body>
+</html>
+

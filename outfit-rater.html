@@ -1,187 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Outfit Rater ✨</title>
-  <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #fce7f3, #dbeafe);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      text-align: center;
-    }
-
-    h1 {
-      color: #1e3a8a;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .controls {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 15px;
-    }
-
-    button, label {
-      background: #6366f1;
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 15px;
-      transition: all 0.3s ease;
-    }
-
-    button:hover, label:hover {
-      background: #4f46e5;
-      transform: scale(1.05);
-    }
-
-    input[type="file"] {
-      display: none;
-    }
-
-    #preview {
-      width: 260px;
-      height: 260px;
-      object-fit: cover;
-      border-radius: 18px;
-      margin: 15px 0;
-      display: none;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    #result {
-      max-width: 500px;
-      background: white;
-      padding: 18px;
-      border-radius: 14px;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
-      white-space: pre-wrap;
-      font-size: 15px;
-      line-height: 1.5;
-      color: #1f2937;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outfit Rater</title>
+<link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <h1>👗 Outfit Rater</h1>
+<body class="outfit-page">
+  <div class="container">
+    <h1>👗 Build Your Outfit</h1>
+    <p>Select items to dress your character and max your Rizz!</p>
 
-  <div class="controls">
-    <label for="upload">Upload Image</label>
-    <button id="cameraBtn">📸 Take Photo</button>
+    <div class="outfit-builder">
+      <!-- Left: Options -->
+      <div id="outfit-options" class="options-column"></div>
+
+      <!-- Right: Person preview -->
+      <div class="person-column">
+        <div class="person">
+          <img id="person-base" src="img/person.png" alt="person" />
+          <div id="person-hat" class="layer hat"></div>
+          <div id="person-shirt" class="layer shirt"></div>
+          <div id="person-pants" class="layer pants"></div>
+          <div id="person-shoes" class="layer shoes"></div>
+          <div id="person-accessories" class="layer accessories"></div>
+        </div>
+
+        <!-- Rizz meter -->
+        <div class="score-container">
+          <div class="score-label">Rizz Meter</div>
+          <div class="score-bar">
+            <div id="score-fill"></div>
+          </div>
+          <div class="result-text" id="resultText">Add items to your outfit!</div>
+        </div>
+      </div>
+    </div>
+
+    <a href="index.html" class="btn btn-white btn-back-home">🏠 Back Home</a>
   </div>
 
-  <input type="file" id="upload" accept="image/*" />
-  <video id="camera" autoplay playsinline style="display:none; width:260px; height:260px; border-radius:18px;"></video>
-  <canvas id="canvas" style="display:none;"></canvas>
-  <img id="preview" />
-
-  <button id="analyzeBtn">✨ Analyze Outfit</button>
-
-  <div id="result"></div>
-
-  <script>
-    const API_KEY = "AIzaSyCSgwZScPoFHN_L66_2-Mdw8Rukoysup1s"; 
-    const uploadInput = document.getElementById("upload");
-    const preview = document.getElementById("preview");
-    const analyzeBtn = document.getElementById("analyzeBtn");
-    const cameraBtn = document.getElementById("cameraBtn");
-    const camera = document.getElementById("camera");
-    const canvas = document.getElementById("canvas");
-    const resultDiv = document.getElementById("result");
-
-    let base64Image = "";
-    let cameraActive = false;
-
-    // 📁 Upload Image
-    uploadInput.addEventListener("change", () => {
-      const file = uploadInput.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        base64Image = reader.result.split(",")[1];
-        preview.src = reader.result;
-        preview.style.display = "block";
-        camera.style.display = "none";
-      };
-      reader.readAsDataURL(file);
-    });
-
-    // 📸 Take Photo / Capture Toggle
-    cameraBtn.addEventListener("click", async () => {
-      if (!cameraActive) {
-        // Start camera
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-          camera.srcObject = stream;
-          camera.style.display = "block";
-          preview.style.display = "none";
-          cameraBtn.textContent = "✅ Capture";
-          cameraActive = true;
-        } catch (err) {
-          alert("Camera access denied or unavailable.");
-        }
-      } else {
-        // Capture photo
-        const context = canvas.getContext("2d");
-        canvas.width = camera.videoWidth;
-        canvas.height = camera.videoHeight;
-        context.drawImage(camera, 0, 0);
-        const dataUrl = canvas.toDataURL("image/jpeg");
-        base64Image = dataUrl.split(",")[1];
-        preview.src = dataUrl;
-        preview.style.display = "block";
-        camera.style.display = "none";
-        cameraBtn.textContent = "📸 Take Photo";
-        cameraActive = false;
-
-        // Stop camera stream
-        const stream = camera.srcObject;
-        if (stream) {
-          stream.getTracks().forEach((t) => t.stop());
-        }
-      }
-    });
-
-    // ✨ Analyze Outfit
-    analyzeBtn.addEventListener("click", async () => {
-      if (!base64Image) {
-        resultDiv.textContent = "Please upload or take a photo first!";
-        return;
-      }
-
-      resultDiv.textContent = "Analyzing outfit... 👀";
-
-      try {
-        const response = await fetch("http://localhost:5000/analyze", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ image: `data:image/jpeg;base64,${base64Image}` })
-        });
-
-        const data = await response.json();
-        if (!data.ok) throw new Error(data.error || "Failed to analyze");
-
-        const text =
-          data.result?.candidates?.[0]?.content?.parts?.[0]?.text ||
-          "No result found.";
-
-        resultDiv.textContent = text;
-      } catch (error) {
-        console.error(error);
-        resultDiv.textContent = "Error analyzing outfit: " + error.message;
-      }
-    });
-  </script>
+  <script src="outfit-rater.js"></script>
 </body>
 </html>
