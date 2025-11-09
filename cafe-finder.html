@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Café Finder ☕</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+
+<body class="cafe-page">
+  <h1 class="main-title"><span class="green">Café</span> <span class="pink">Finder</span> ☕</h1>
+  <p class="tagline">Enter your Canadian address and radius to find cafés near you 💖</p>
+
+
+  <!-- Sticky input bar -->
+  <div class="input-container sticky-input">
+    <input id="addressInput" type="text" placeholder="Enter address (e.g. 300 Main St, Toronto)" />
+    <input id="radiusInput" type="number" placeholder="Radius (km)" min="1" max="20" />
+    <button id="searchBtn">🔍 Find Cafés</button>
+  </div>
+
+
+  <div id="loading" class="hidden">⏳ Searching for cafés near you...</div>
+  <div id="results"></div>
+
+
+  <a href="index.html" class="btn-back">← Back to Home</a>
+
+
+  <script src="menuDatabase.js"></script>
+  <script src="cafe-finder.js"></script>
+</body>
+</html>
+
